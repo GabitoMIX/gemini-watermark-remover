@@ -2,6 +2,11 @@
 
 La herramienta local puede usar IOPaint como refinador opcional de IA.
 
+Hay dos flujos distintos:
+
+- Gemini Watermark Remover: automatico para marcas de agua de Gemini.
+- IOPaint: manual, tipo borrador magico, para fotos complejas, objetos, texto, personas o catalogos.
+
 ## Flujo
 
 1. La pagina procesa primero la imagen con el motor rapido del repositorio.
@@ -26,7 +31,14 @@ Despues abre la herramienta del repo y selecciona:
 
 ## Dokploy / Docker
 
-La integracion solo necesita que el contenedor exponga el puerto de IOPaint y que el navegador pueda llegar a esa URL.
+El stack listo para Dokploy esta en:
+
+```text
+deploy/iopaint/compose.yaml
+```
+
+Usa ese compose cuando quieras levantar IOPaint como editor manual en tu Orange Pi.
+La integracion automatica solo necesita que el contenedor exponga el puerto de IOPaint y que el navegador pueda llegar a esa URL.
 Si lo publicas detras de un dominio o proxy, coloca esa URL en el campo `IOPaint API`.
 
 Ejemplos:

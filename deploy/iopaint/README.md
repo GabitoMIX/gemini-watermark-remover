@@ -1,0 +1,62 @@
+# IOPaint para Dokploy
+
+Este stack levanta IOPaint como borrador magico manual, separado de la herramienta automatica de marcas de agua de Gemini.
+
+## Para que sirve
+
+- Gemini Watermark Remover: automatico, rapido, pensado para la marca de agua de Gemini.
+- IOPaint: manual, tipo mini editor de fotos; pintas con brocha lo que quieres borrar y LaMa reconstruye el fondo.
+
+## Dokploy
+
+1. Crea una nueva app en Dokploy.
+2. Elige despliegue por Docker Compose desde este repositorio.
+3. Usa esta ruta como compose:
+
+```text
+deploy/iopaint/compose.yaml
+```
+
+4. Configura las variables de entorno:
+
+```env
+IOPAINT_IMAGE=ghcr.io/sanster/iopaint:cpu
+IOPAINT_PORT=8080
+IOPAINT_MODEL=lama
+IOPAINT_DEVICE=cpu
+IOPAINT_MEMORY_LIMIT=4g
+```
+
+5. Publica el puerto `8080` o asigna un dominio/proxy en Dokploy.
+
+## Uso directo
+
+Cuando Dokploy termine, abre la URL de IOPaint. Vas a ver una interfaz tipo editor:
+
+1. Sube la imagen.
+2. Ajusta el grosor del pincel.
+3. Pinta sobre el objeto, texto, persona o imperfeccion.
+4. Espera el procesamiento en CPU.
+5. Descarga el resultado.
+
+## Conexion con esta herramienta
+
+Si tambien quieres usarlo como refinador automatico desde la pantalla local del repo:
+
+1. Abre Gemini Watermark Remover.
+2. Selecciona `IA local + fallback`.
+3. En `IOPaint API`, coloca la URL publicada por Dokploy.
+
+Ejemplos:
+
+```text
+http://192.168.13.204:8080
+https://iopaint.tu-dominio.com
+```
+
+## Notas para Orange Pi
+
+- En CPU, LaMa puede tardar varios segundos por imagen.
+- La primera ejecucion descarga el modelo y puede tardar mas.
+- El volumen `iopaint-data` conserva cache/modelos entre reinicios.
+- Si el tag `ghcr.io/sanster/iopaint:cpu` no existe para tu arquitectura, cambia `IOPAINT_IMAGE` por una imagen compatible con ARM64.

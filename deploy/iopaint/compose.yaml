@@ -1,0 +1,32 @@
+services:
+  iopaint:
+    image: ${IOPAINT_IMAGE:-ghcr.io/sanster/iopaint:cpu}
+    container_name: iopaint
+    entrypoint: []
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${IOPAINT_PORT:-8080}:8080"
+    command:
+      - iopaint
+      - start
+      - --model=${IOPAINT_MODEL:-lama}
+      - --device=${IOPAINT_DEVICE:-cpu}
+      - --host=0.0.0.0
+      - --port=8080
+      - --model-dir=/data/models
+    environment:
+      HF_HOME: /data/huggingface
+      TRANSFORMERS_CACHE: /data/huggingface
+    volumes:
+      - iopaint-data:/data
+    mem_limit: ${IOPAINT_MEMORY_LIMIT:-4g}
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080', timeout=5)\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+volumes:
+  iopaint-data:
