@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta
@@ -7,7 +7,7 @@
     content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; worker-src 'self'"
   >
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tampermonkey Worker Probe</title>
+  <title>Prueba de Worker de Tampermonkey</title>
   <style>
     :root {
       color-scheme: light;
@@ -107,34 +107,34 @@
 </head>
 <body>
   <main>
-    <h1>Tampermonkey DOM Sandbox Worker Probe</h1>
+    <h1>Prueba de Worker DOM Sandbox de Tampermonkey</h1>
     <p>
-      这个页面模拟 Gemini 类约束中的 <code>worker-src 'self'</code>，因此页面自身的 Blob Worker 应该失败。
-      如果 Tampermonkey 能以 DOM sandbox 运行，就应该还能在隔离上下文里拉起 Worker，并通过桥接把结果回发给页面。
+      Esta pagina simula una restriccion tipo Gemini con <code>worker-src 'self'</code>, asi que el Blob Worker de la pagina deberia fallar.
+      Si Tampermonkey puede ejecutarse en DOM sandbox, deberia iniciar un Worker en el contexto aislado y devolver el resultado por el puente.
     </p>
     <div class="actions">
-      <a class="button" href="/tampermonkey-worker-probe.user.js">安装 / 更新 Probe Userscript</a>
-      <a class="button" href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo" target="_blank" rel="noreferrer">打开 Tampermonkey 商店页</a>
+      <a class="button" href="/tampermonkey-worker-probe.user.js">Instalar / actualizar probe userscript</a>
+      <a class="button" href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo" target="_blank" rel="noreferrer">Abrir Tampermonkey en Chrome Web Store</a>
     </div>
     <div class="panel-grid">
       <section class="panel">
-        <span class="label">Page Blob Worker</span>
-        <div class="value" id="page-worker-status">等待中</div>
+        <span class="label">Worker Blob de la pagina</span>
+        <div class="value" id="page-worker-status">Esperando</div>
       </section>
       <section class="panel">
-        <span class="label">Userscript Sandbox Worker</span>
-        <div class="value" id="sandbox-worker-status">等待中</div>
+        <span class="label">Worker sandbox del userscript</span>
+        <div class="value" id="sandbox-worker-status">Esperando</div>
       </section>
       <section class="panel">
-        <span class="label">Bridge Roundtrip</span>
-        <div class="value" id="bridge-status">等待中</div>
+        <span class="label">Prueba del puente</span>
+        <div class="value" id="bridge-status">Esperando</div>
       </section>
       <section class="panel">
-        <span class="label">Overall</span>
-        <div class="value" id="overall-status">启动中</div>
+        <span class="label">Estado general</span>
+        <div class="value" id="overall-status">Iniciando</div>
       </section>
     </div>
-    <pre id="report">waiting...</pre>
+    <pre id="report">esperando...</pre>
   </main>
 
   <script>
@@ -166,14 +166,14 @@
         sandboxWorkerNode.textContent = formatStatus(state.userscriptSandboxWorker);
         bridgeNode.textContent = formatStatus(state.bridgeRoundtrip);
         overallNode.textContent = state.completed
-          ? (state.bridgeRoundtrip?.ok ? '完成' : '失败')
-          : (state.userscriptDetected ? '桥接测试中' : '等待 Userscript');
+          ? (state.bridgeRoundtrip?.ok ? 'Completo' : 'Fallido')
+          : (state.userscriptDetected ? 'Probando puente' : 'Esperando userscript');
         reportNode.textContent = JSON.stringify(state, null, 2);
         document.documentElement.dataset.gwrTmProbeStatus = state.completed ? 'complete' : 'running';
       };
 
       const formatStatus = (value) => {
-        if (!value) return '等待中';
+        if (!value) return 'Esperando';
         if (value.ok === true) return value.summary || 'OK';
         if (value.ok === false) return value.summary || value.message || 'FAILED';
         return JSON.stringify(value);
@@ -200,8 +200,8 @@
           if (!state.bridgeRoundtrip) {
             state.bridgeRoundtrip = {
               ok: false,
-              summary: 'Bridge timeout',
-              error: 'Timed out waiting for gwr:tm-bridge-response'
+              summary: 'Tiempo agotado en el puente',
+              error: 'Se agoto el tiempo esperando gwr:tm-bridge-response'
             };
             complete();
           }
@@ -224,26 +224,26 @@
           ], { type: 'text/javascript' }));
           worker = new Worker(workerUrl);
           const response = await new Promise((resolve, reject) => {
-            const timeoutId = window.setTimeout(() => reject(new Error('Page worker timed out')), 1500);
+            const timeoutId = window.setTimeout(() => reject(new Error('Tiempo agotado en el Worker de la pagina')), 1500);
             worker.addEventListener('message', (event) => {
               window.clearTimeout(timeoutId);
               resolve(event.data);
             }, { once: true });
             worker.addEventListener('error', (event) => {
               window.clearTimeout(timeoutId);
-              reject(event.error || new Error(event.message || 'Page worker crashed'));
+              reject(event.error || new Error(event.message || 'El Worker de la pagina se detuvo'));
             }, { once: true });
             worker.postMessage({ ping: true });
           });
           state.pageDirectBlobWorker = {
             ok: true,
-            summary: 'Unexpectedly succeeded',
+            summary: 'Exito inesperado',
             response
           };
         } catch (error) {
           state.pageDirectBlobWorker = {
             ok: false,
-            summary: error?.name || 'Expected failure',
+            summary: error?.name || 'Fallo esperado',
             message: error?.message || String(error)
           };
         } finally {
@@ -259,8 +259,8 @@
           state.userscriptDetected = true;
           state.userscriptSandboxWorker = payload.payload || {
             ok: false,
-            summary: 'Userscript ready payload missing',
-            message: 'No payload received'
+            summary: 'Falta el payload de userscript listo',
+            message: 'No se recibio payload'
           };
           requestBridge();
           render();
@@ -280,7 +280,7 @@
         handshakeTimer = window.setInterval(requestHandshake, 700);
         window.setTimeout(() => {
           if (!state.userscriptDetected) {
-            state.errors.push('Tampermonkey probe userscript not detected');
+            state.errors.push('No se detecto el probe userscript de Tampermonkey');
             complete();
           }
         }, 5000);

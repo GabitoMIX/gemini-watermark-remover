@@ -1,4 +1,4 @@
-export const GWR_ORIGINAL_ASSET_REFRESH_MESSAGE = '无法获取原图，请刷新页面后重试';
+export const GWR_ORIGINAL_ASSET_REFRESH_MESSAGE = 'No se pudo obtener la imagen original. Actualiza la pagina e intenta de nuevo.';
 
 export function showUserNotice(targetWindow = globalThis, message = '') {
   const normalizedMessage = typeof message === 'string' ? message.trim() : '';

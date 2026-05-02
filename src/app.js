@@ -17,17 +17,17 @@ import {
 } from './utils.js';
 
 const TEXT = {
-    loading: '正在加载资源...',
-    size: '尺寸',
-    watermark: '检测到的水印',
-    position: '位置',
-    status: '状态',
-    removed: '水印已移除',
-    skipped: '未检测到可移除水印，已保留原图',
-    unsupported: '浏览器不支持复制图片',
-    copied: '已复制！',
-    copy: '复制结果',
-    copyFailed: '复制失败'
+    loading: 'Cargando recursos...',
+    size: 'Tamano',
+    watermark: 'Marca detectada',
+    position: 'Posicion',
+    status: 'Estado',
+    removed: 'Marca de agua eliminada',
+    skipped: 'No se detecto una marca removible; se conservo la imagen original',
+    unsupported: 'El navegador no permite copiar imagenes',
+    copied: 'Copiado',
+    copy: 'Copiar resultado',
+    copyFailed: 'No se pudo copiar la imagen'
 };
 
 let enginePromise = null;

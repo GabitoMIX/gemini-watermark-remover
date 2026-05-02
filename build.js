@@ -31,11 +31,11 @@ const jsBanner = `/*!
 
 const userscriptBanner = `// ==UserScript==
 // @name         Gemini NanoBanana Watermark Remover
-// @name:zh-CN   Gemini NanoBanana 图片水印移除
+// @name:es      Gemini NanoBanana Eliminador de marcas de agua
 // @namespace    https://github.com/GargantuaX
 // @version      ${pkg.version}
-// @description  Automatically removes watermarks from Gemini AI generated images
-// @description:zh-CN 自动移除 Gemini AI 生成图像中的水印
+// @description  Elimina automaticamente marcas de agua de imagenes generadas con Gemini AI
+// @description:es Elimina automaticamente marcas de agua de imagenes generadas con Gemini AI
 // @icon         https://www.google.com/s2/favicons?domain=gemini.google.com
 // @author       GargantuaX
 // @license      MIT

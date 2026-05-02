@@ -2,7 +2,7 @@
 // @name         GWR Tampermonkey DOM Worker Probe
 // @namespace    https://github.com/GargantuaX/gemini-watermark-remover
 // @version      0.1.0
-// @description  Probe DOM-sandbox Worker availability and page bridge on local test pages
+// @description  Comprueba el Worker DOM sandbox y el puente de pagina en pruebas locales
 // @match        http://127.0.0.1/*
 // @match        http://localhost/*
 // @sandbox      DOM
@@ -33,26 +33,26 @@
       ], { type: 'text/javascript' }));
       worker = new Worker(workerUrl);
       const result = await new Promise((resolve, reject) => {
-        const timeoutId = window.setTimeout(() => reject(new Error('Tampermonkey sandbox worker timed out')), 2500);
+        const timeoutId = window.setTimeout(() => reject(new Error('Tiempo agotado en el Worker sandbox de Tampermonkey')), 2500);
         worker.addEventListener('message', (event) => {
           window.clearTimeout(timeoutId);
           resolve(event.data);
         }, { once: true });
         worker.addEventListener('error', (event) => {
           window.clearTimeout(timeoutId);
-          reject(event.error || new Error(event.message || 'Tampermonkey sandbox worker crashed'));
+          reject(event.error || new Error(event.message || 'El Worker sandbox de Tampermonkey se detuvo'));
         }, { once: true });
         worker.postMessage(payload);
       });
       return {
         ok: true,
-        summary: 'Worker OK',
+        summary: 'Worker correcto',
         result
       };
     } catch (error) {
       return {
         ok: false,
-        summary: error?.name || 'Worker failed',
+        summary: error?.name || 'Fallo del Worker',
         message: error?.message || String(error)
       };
     } finally {

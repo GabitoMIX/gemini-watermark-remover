@@ -1,6 +1,6 @@
 {
   "name": "@pilio/gemini-watermark-remover",
-  "description": "Automatically removes watermarks from Gemini AI generated images",
+  "description": "Elimina automaticamente marcas de agua de imagenes generadas con Gemini AI",
   "version": "1.0.12",
   "author": "GargantuaX",
   "sideEffects": false,

@@ -9,10 +9,10 @@ async function readText(relativePath) {
 }
 
 test('production build should emit a MV3 extension that packages the shared userscript runtime', async () => {
-  const build = spawnSync('pnpm', ['build'], {
+  const build = spawnSync(process.execPath, ['build.js', '--prod'], {
     cwd: new URL('../..', import.meta.url),
     encoding: 'utf8',
-    shell: process.platform === 'win32'
+    shell: false
   });
 
   assert.equal(build.status, 0, build.stderr || build.stdout);
@@ -57,12 +57,12 @@ test('production build should emit a MV3 extension that packages the shared user
   assert.match(contentMain, /GM_xmlhttpRequest/);
 
   const popupHtml = await readText('dist/extension/popup.html');
-  assert.match(popupHtml, /<html lang="en">/);
+  assert.match(popupHtml, /<html lang="es">/);
   assert.match(popupHtml, /https:\/\/geminiwatermarkremover\.io\//);
   assert.match(popupHtml, /https:\/\/pilio\.ai\/image-watermark-remover/);
-  assert.match(popupHtml, /Online Gemini watermark remover/);
-  assert.match(popupHtml, /Remove any image watermark/);
-  assert.match(popupHtml, /Report an issue on GitHub/);
+  assert.match(popupHtml, /Quitar marcas de agua de Gemini online/);
+  assert.match(popupHtml, /Quitar cualquier marca de agua/);
+  assert.match(popupHtml, /Reportar un problema en GitHub/);
   assert.match(popupHtml, /https:\/\/github\.com\/GargantuaX\/gemini-watermark-remover\/issues/);
   assert.match(popupHtml, /assets\/github\.svg/);
   assert.match(popupHtml, /assets\/logo-shape\.svg/);
