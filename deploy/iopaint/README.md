@@ -21,13 +21,13 @@ deploy/iopaint/compose.yaml
 
 ```env
 IOPAINT_VERSION=1.5.3
-IOPAINT_PORT=8080
+IOPAINT_PORT=8086
 IOPAINT_MODEL=lama
 IOPAINT_DEVICE=cpu
 IOPAINT_MEMORY_LIMIT=4g
 ```
 
-5. Publica el puerto `8080` o asigna un dominio/proxy en Dokploy.
+5. Publica el puerto externo `8086` o asigna un dominio/proxy en Dokploy al puerto interno `8080`.
 
 ## Uso directo
 

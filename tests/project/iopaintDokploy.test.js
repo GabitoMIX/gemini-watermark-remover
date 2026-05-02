@@ -17,6 +17,8 @@ test('iopaint dokploy compose should define a standalone cpu service', async () 
   assert.match(compose, /--device=\$\{IOPAINT_DEVICE:-cpu\}/);
   assert.match(compose, /--host=0\.0\.0\.0/);
   assert.match(compose, /--port=8080/);
+  assert.match(compose, /\$\{IOPAINT_PORT:-8086\}:8080/);
+  assert.doesNotMatch(compose, /container_name:/);
   assert.match(compose, /iopaint-data:/);
   assert.match(compose, /healthcheck:/);
 });
