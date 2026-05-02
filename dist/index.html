@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini Watermark Remover - Abriendo herramienta</title>
+  <meta name="description" content="Entrada local para Gemini Watermark Remover. Redirige a la herramienta de previsualizacion del repositorio.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="refresh" content="0; url=./dev-preview.html">
+  <link rel="canonical" href="https://geminiwatermarkremover.io/">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7fb;
+      --panel: rgba(255, 255, 255, 0.92);
+      --text: #161a22;
+      --muted: #5c6472;
+      --line: rgba(22, 26, 34, 0.12);
+      --accent: #0f9f7a;
+      --accent-strong: #0b7d61;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #10141b;
+        --panel: rgba(22, 28, 36, 0.9);
+        --text: #eef3f5;
+        --muted: #a9b4bd;
+        --line: rgba(238, 243, 245, 0.12);
+        --accent: #5dd6ae;
+        --accent-strong: #84e4c5;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(15, 159, 122, 0.16), transparent 32rem),
+        radial-gradient(circle at 82% 14%, rgba(37, 99, 235, 0.12), transparent 26rem),
+        var(--bg);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    main {
+      width: min(680px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 32px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.12);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(15, 159, 122, 0.12);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.06;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 120ms ease, background 120ms ease, color 120ms ease, border-color 120ms ease;
+    }
+
+    a.button:hover {
+      transform: translateY(-1px);
+    }
+
+    a.button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    a.button.primary:hover {
+      background: var(--accent-strong);
+    }
+
+    a.button.secondary {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: transparent;
+    }
+
+    .notes {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    code {
+      font-family: Consolas, "SFMono-Regular", monospace;
+      font-size: 0.95em;
+    }
+  </style>
+  <script>
+    window.location.replace('./dev-preview.html');
+  </script>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Entrada local</div>
+    <h1>Abriendo la herramienta</h1>
+    <p>
+      Esta pantalla redirige automaticamente a la previsualizacion local para que no tengas que pasar por el menu de entrada.
+      Si el navegador no cambia de pagina, usa el boton principal.
+    </p>
+
+    <div class="actions">
+      <a class="button primary" href="./dev-preview.html">Abrir herramienta</a>
+      <a class="button secondary" href="userscript/gemini-watermark-remover.user.js" target="_blank">Instalar userscript</a>
+      <a class="button secondary" href="https://geminiwatermarkremover.io/" target="_blank" rel="noopener noreferrer">Sitio oficial</a>
+    </div>
+
+    <div class="notes">
+      <div>Sitio oficial: <code>https://geminiwatermarkremover.io/</code></div>
+      <div>La entrada conserva <code>noindex, nofollow</code> para evitar duplicar la pagina publica.</div>
+      <div>Durante el desarrollo local, <code>pnpm dev</code> tambien sirve el userscript, la pagina probe y esta herramienta.</div>
+    </div>
+  </main>
+</body>
+</html>
