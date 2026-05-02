@@ -20,7 +20,7 @@ deploy/iopaint/compose.yaml
 4. Configura las variables de entorno:
 
 ```env
-IOPAINT_IMAGE=ghcr.io/sanster/iopaint:cpu
+IOPAINT_VERSION=1.5.3
 IOPAINT_PORT=8080
 IOPAINT_MODEL=lama
 IOPAINT_DEVICE=cpu
@@ -57,6 +57,7 @@ https://iopaint.tu-dominio.com
 ## Notas para Orange Pi
 
 - En CPU, LaMa puede tardar varios segundos por imagen.
+- La imagen se construye desde `pip install IOPaint` para evitar depender de imagenes GHCR privadas o sin tag publico.
 - La primera ejecucion descarga el modelo y puede tardar mas.
 - El volumen `iopaint-data` conserva cache/modelos entre reinicios.
-- Si el tag `ghcr.io/sanster/iopaint:cpu` no existe para tu arquitectura, cambia `IOPAINT_IMAGE` por una imagen compatible con ARM64.
+- En Orange Pi / ARM64, la instalacion descarga ruedas CPU de PyTorch; el primer build puede tardar bastante y consumir varios GB.
