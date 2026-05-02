@@ -29,6 +29,8 @@ test('internal dev preview page should retain the browser preview app entry', as
 
     assert.match(html, /id="uploadArea"/i);
     assert.match(html, /id="comparisonContainer"/i);
+    assert.match(html, /id="processingMode"/i);
+    assert.match(html, /id="iopaintEndpoint"/i);
     assert.match(html, /<script\s+src="app\.js"><\/script>/i);
 });
 

@@ -15,6 +15,10 @@ import {
     showLoading,
     hideLoading
 } from './utils.js';
+import {
+    DEFAULT_IOPAINT_ENDPOINT,
+    refineBlobWithIopaint
+} from './iopaintClient.js';
 
 const TEXT = {
     loading: 'Cargando recursos...',
@@ -24,6 +28,10 @@ const TEXT = {
     status: 'Estado',
     removed: 'Marca de agua eliminada',
     skipped: 'No se detecto una marca removible; se conservo la imagen original',
+    fastProcessing: 'Procesando con el motor rapido...',
+    aiProcessing: 'Refinando con IOPaint...',
+    aiReady: 'Resultado refinado con IOPaint',
+    aiFallback: 'IOPaint no respondio; se uso el motor rapido',
     unsupported: 'El navegador no permite copiar imagenes',
     copied: 'Copiado',
     copy: 'Copiar resultado',
@@ -46,6 +54,8 @@ const copyBtn = document.getElementById('copyBtn');
 const resetBtn = document.getElementById('resetBtn');
 const processedOverlay = document.getElementById('processedOverlay');
 const sliderHandle = document.getElementById('sliderHandle');
+const processingMode = document.getElementById('processingMode');
+const iopaintEndpoint = document.getElementById('iopaintEndpoint');
 
 async function getEngine() {
     if (!enginePromise) {
@@ -218,6 +228,9 @@ function renderSingleImageMeta(item) {
 }
 
 function getProcessedStatusLabel(item) {
+    if (item?.processedMeta?.processorPath === 'iopaint') {
+        return TEXT.aiReady;
+    }
     return !isConfirmedWatermarkDecision(item)
         ? TEXT.skipped
         : TEXT.removed;
@@ -249,10 +262,19 @@ async function processSingle(item) {
         originalImage.src = img.src;
         renderSingleImageMeta(item);
 
+        showLoading(TEXT.fastProcessing);
         const processed = await processImageWithBestPath(item.file, img);
         item.processedMeta = processed.meta;
         item.processedBlob = processed.blob;
         item.processedUrl = URL.createObjectURL(processed.blob);
+
+        const aiProcessed = await maybeRefineWithIopaint(item);
+        if (aiProcessed) {
+            if (item.processedUrl) URL.revokeObjectURL(item.processedUrl);
+            item.processedMeta = aiProcessed.meta;
+            item.processedBlob = aiProcessed.blob;
+            item.processedUrl = URL.createObjectURL(aiProcessed.blob);
+        }
 
         processedImage.src = item.processedUrl;
         processedOverlay.style.display = 'block';
@@ -269,6 +291,52 @@ async function processSingle(item) {
         document.getElementById('comparisonContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (error) {
         console.error(error);
+        setStatusMessage(error?.message || 'No se pudo procesar la imagen', 'warn');
+    } finally {
+        hideLoading();
+    }
+}
+
+function shouldUseIopaint() {
+    return processingMode?.value === 'iopaint';
+}
+
+async function maybeRefineWithIopaint(item) {
+    if (!shouldUseIopaint() || !item?.processedBlob || !item?.originalImg) {
+        return null;
+    }
+
+    const watermarkInfo = resolveDisplayWatermarkInfo(
+        item,
+        getEstimatedWatermarkInfo(item)
+    );
+    if (!watermarkInfo?.position) {
+        return null;
+    }
+
+    showLoading(TEXT.aiProcessing);
+    try {
+        const result = await refineBlobWithIopaint({
+            endpoint: iopaintEndpoint?.value || DEFAULT_IOPAINT_ENDPOINT,
+            imageBlob: item.processedBlob,
+            width: item.originalImg.width,
+            height: item.originalImg.height,
+            watermarkInfo
+        });
+
+        setStatusMessage(TEXT.aiReady, 'success');
+        return {
+            blob: result.processedBlob,
+            meta: {
+                ...(item.processedMeta || {}),
+                ...(result.processedMeta || {}),
+                iopaintFallback: false
+            }
+        };
+    } catch (error) {
+        console.warn('iopaint refine failed, keeping fast result:', error);
+        setStatusMessage(TEXT.aiFallback, 'warn');
+        return null;
     }
 }
 

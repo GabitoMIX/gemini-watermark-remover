@@ -94,6 +94,20 @@
         Carga una imagen, revisa el antes y despues con el comparador, y copia o descarga el resultado procesado.
       </p>
 
+      <div class="max-w-4xl mx-auto mb-4 grid gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm md:grid-cols-[minmax(0,220px)_1fr]">
+        <label class="grid gap-1 text-sm font-semibold text-slate-700">
+          <span>Modo</span>
+          <select id="processingMode" class="h-11 rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-primary">
+            <option value="fast">Rapido</option>
+            <option value="iopaint">IA local + fallback</option>
+          </select>
+        </label>
+        <label class="grid gap-1 text-sm font-semibold text-slate-700">
+          <span>IOPaint API</span>
+          <input id="iopaintEndpoint" class="h-11 rounded-md border border-slate-200 bg-white px-3 font-mono text-sm text-slate-900 outline-none focus:border-primary" value="http://127.0.0.1:8080" spellcheck="false" />
+        </label>
+      </div>
+
       <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-soft p-2 md:p-3 border border-emerald-100">
         <div id="uploadArea" class="group relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-emerald-200 rounded-md bg-emerald-50/40 hover:bg-emerald-50 hover:border-primary transition-all cursor-pointer">
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
