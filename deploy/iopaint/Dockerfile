@@ -1,6 +1,7 @@
 FROM python:3.10-slim-bookworm
 
 ARG IOPAINT_VERSION=1.5.3
+ARG IOPAINT_INSTALL_TOYS=1
 
 ENV PYTHONUNBUFFERED=1 \
   PIP_NO_CACHE_DIR=1 \
@@ -24,7 +25,13 @@ RUN apt-get update \
 
 RUN python -m pip install --upgrade pip setuptools wheel \
   && pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu \
-  && pip install "IOPaint==${IOPAINT_VERSION}"
+  && pip install "IOPaint==${IOPAINT_VERSION}" \
+  && if [ "${IOPAINT_INSTALL_TOYS}" = "1" ]; then \
+    iopaint install-plugins-packages \
+    && pip install gfpgan realesrgan segment-anything; \
+  fi
+
+COPY deploy/iopaint/start.sh /usr/local/bin/start-iopaint
+RUN chmod +x /usr/local/bin/start-iopaint
 
 EXPOSE 8080
-

@@ -5,22 +5,33 @@ services:
       dockerfile: deploy/iopaint/Dockerfile
       args:
         IOPAINT_VERSION: ${IOPAINT_VERSION:-1.5.3}
+        IOPAINT_INSTALL_TOYS: ${IOPAINT_INSTALL_TOYS:-1}
     init: true
     restart: unless-stopped
     ports:
       - "${IOPAINT_PORT:-8086}:8080"
     command:
-      - iopaint
-      - start
-      - --model=${IOPAINT_MODEL:-lama}
-      - --device=${IOPAINT_DEVICE:-cpu}
-      - --host=0.0.0.0
-      - --port=8080
-      - --model-dir=/data/models
+      - /usr/local/bin/start-iopaint
     environment:
       HF_HOME: /data/huggingface
       TRANSFORMERS_CACHE: /data/huggingface
       XDG_CACHE_HOME: /data/cache
+      IOPAINT_MODEL: ${IOPAINT_MODEL:-lama}
+      IOPAINT_DEVICE: ${IOPAINT_DEVICE:-cpu}
+      IOPAINT_ENABLE_INTERACTIVE_SEG: ${IOPAINT_ENABLE_INTERACTIVE_SEG:-1}
+      IOPAINT_INTERACTIVE_SEG_MODEL: ${IOPAINT_INTERACTIVE_SEG_MODEL:-mobile_sam}
+      IOPAINT_INTERACTIVE_SEG_DEVICE: ${IOPAINT_INTERACTIVE_SEG_DEVICE:-cpu}
+      IOPAINT_ENABLE_REMOVE_BG: ${IOPAINT_ENABLE_REMOVE_BG:-1}
+      IOPAINT_REMOVE_BG_MODEL: ${IOPAINT_REMOVE_BG_MODEL:-briaai/RMBG-1.4}
+      IOPAINT_REMOVE_BG_DEVICE: ${IOPAINT_REMOVE_BG_DEVICE:-cpu}
+      IOPAINT_ENABLE_ANIME_SEG: ${IOPAINT_ENABLE_ANIME_SEG:-1}
+      IOPAINT_ENABLE_REALESRGAN: ${IOPAINT_ENABLE_REALESRGAN:-1}
+      IOPAINT_REALESRGAN_DEVICE: ${IOPAINT_REALESRGAN_DEVICE:-cpu}
+      IOPAINT_REALESRGAN_MODEL: ${IOPAINT_REALESRGAN_MODEL:-realesr-general-x4v3}
+      IOPAINT_ENABLE_GFPGAN: ${IOPAINT_ENABLE_GFPGAN:-1}
+      IOPAINT_GFPGAN_DEVICE: ${IOPAINT_GFPGAN_DEVICE:-cpu}
+      IOPAINT_ENABLE_RESTOREFORMER: ${IOPAINT_ENABLE_RESTOREFORMER:-1}
+      IOPAINT_RESTOREFORMER_DEVICE: ${IOPAINT_RESTOREFORMER_DEVICE:-cpu}
     volumes:
       - iopaint-data:/data
     mem_limit: ${IOPAINT_MEMORY_LIMIT:-4g}

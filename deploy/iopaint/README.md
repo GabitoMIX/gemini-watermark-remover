@@ -21,10 +21,25 @@ deploy/iopaint/compose.yaml
 
 ```env
 IOPAINT_VERSION=1.5.3
+IOPAINT_INSTALL_TOYS=1
 IOPAINT_PORT=8086
 IOPAINT_MODEL=lama
 IOPAINT_DEVICE=cpu
 IOPAINT_MEMORY_LIMIT=4g
+IOPAINT_ENABLE_INTERACTIVE_SEG=1
+IOPAINT_INTERACTIVE_SEG_MODEL=mobile_sam
+IOPAINT_INTERACTIVE_SEG_DEVICE=cpu
+IOPAINT_ENABLE_REMOVE_BG=1
+IOPAINT_REMOVE_BG_MODEL=briaai/RMBG-1.4
+IOPAINT_REMOVE_BG_DEVICE=cpu
+IOPAINT_ENABLE_ANIME_SEG=1
+IOPAINT_ENABLE_REALESRGAN=1
+IOPAINT_REALESRGAN_DEVICE=cpu
+IOPAINT_REALESRGAN_MODEL=realesr-general-x4v3
+IOPAINT_ENABLE_GFPGAN=1
+IOPAINT_GFPGAN_DEVICE=cpu
+IOPAINT_ENABLE_RESTOREFORMER=1
+IOPAINT_RESTOREFORMER_DEVICE=cpu
 ```
 
 5. Publica el puerto externo `8086` o asigna un dominio/proxy en Dokploy al puerto interno `8080`.
@@ -50,7 +65,7 @@ Si tambien quieres usarlo como refinador automatico desde la pantalla local del 
 Ejemplos:
 
 ```text
-http://192.168.13.204:8080
+http://192.168.13.204:8086
 https://iopaint.tu-dominio.com
 ```
 
@@ -58,6 +73,8 @@ https://iopaint.tu-dominio.com
 
 - En CPU, LaMa puede tardar varios segundos por imagen.
 - La imagen se construye desde `pip install IOPaint` para evitar depender de imagenes GHCR privadas o sin tag publico.
+- `IOPAINT_INSTALL_TOYS=1` instala dependencias de plugins y deja activos RemoveBG, segmentacion interactiva, AnimeSeg, RealESRGAN, GFPGAN y RestoreFormer.
+- Si el contenedor se queda sin memoria, apaga primero `IOPAINT_ENABLE_REALESRGAN=0`, `IOPAINT_ENABLE_GFPGAN=0` y `IOPAINT_ENABLE_RESTOREFORMER=0`.
 - La primera ejecucion descarga el modelo y puede tardar mas.
 - El volumen `iopaint-data` conserva cache/modelos entre reinicios.
 - En Orange Pi / ARM64, la instalacion descarga ruedas CPU de PyTorch; el primer build puede tardar bastante y consumir varios GB.
