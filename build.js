@@ -130,6 +130,17 @@ function copyExtensionStaticAssets() {
   cpSync('src/extension/popup.js', 'dist/extension/popup.js');
 }
 
+function writeBuildInfo() {
+  mkdirSync('dist', { recursive: true });
+  writeFileSync('dist/build-info.json', `${JSON.stringify({
+    name: pkg.name,
+    version: pkg.version,
+    commit: getCommitHash(),
+    locale: 'es',
+    generatedAt: new Date().toISOString()
+  }, null, 2)}\n`);
+}
+
 const copyAssetsPlugin = {
   name: 'copy-assets',
   setup(build) {
@@ -369,6 +380,7 @@ if (isProd) {
   ]);
   writeExtensionManifest();
   copyExtensionStaticAssets();
+  writeBuildInfo();
   console.log('✅ Build complete!');
   process.exit(0);
 } else {
@@ -409,6 +421,7 @@ if (isProd) {
       copyExtensionStaticAssets();
     }
   });
+  writeBuildInfo();
 
   await serveStaticDevDist('dist');
 
